@@ -138,14 +138,14 @@ su -
 
 When участники *именуют сценарии*, выполняют команды и анализируют их вывод и поведение
 ----
-- Сценарий "Как ...?"
+- Сценарий "Как узнать установлен ли podman, информацию о системе и используемых дисковых ресурсов?"
 ```shell
-podman version # TODO: собственные пометки участников для будущего использования в проектах
-podman system info
-podman system df
+podman version # Версия podman, API, архитектура
+podman system info #  Информация о системе
+podman system df # Информация о запущеннных контейнерах и используемых дисковых ресурсах
 ```
 
-- Сценарий "Как ...?"
+- Сценарий "Как подключиться к реестру образов"
 ```shell
 podman logout
 podman login {{ registry-host }}
@@ -154,22 +154,22 @@ podman login {{ registry-host }}
 - Сценарий "Как найти нужный образ в registry?"
 Залогиниться браузером по адресу {{ registry-host }}, в поиске найти нужный образ и скопировать полное символьное имя (включая сетевой адрес хоста).
 
-- Сценарий "Как ...?"
+- Сценарий "Как скачать образ и посмотреть сколько он занимает"
 ```shell
 podman image pull {{ registry-host }}/{{ os-images-path }}/alpine:3.14
 podman system df
 ````
 
-- Сценарий "Как ...?"
+- Сценарий "Как загрузиь и запустить контейнер hello"
 ```shell
 podman container run hello
 
-podman container run --name demo -it {{ registry-host }}/{{ os-images-path }}/alpine:3.14
+podman container run --name demo -it {{ registry-host }}/{{ os-images-path }}/alpine:3.14 # Как запустить alpine и открыть shell из контейнера
 /# cat /etc/os-release
 /# exit 
 ```
 
-- Сценарий "Как ...?"
+- Сценарий "Как посмотреть какие контейнеры запущены и удалить контейнер с именем demo"
 ```shell
 podman container ls [--all]
 podman container rm demo
