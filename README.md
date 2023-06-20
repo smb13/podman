@@ -279,45 +279,61 @@ Given
 
 When участники именуют сценарии, выполняют команды и анализируют их вывод и поведение
 ----
-- Сценарий "Как ...?"
+- Сценарий "Как получить информацию о скаченных образах?"
 ```shell
-podman image ls # TODO: собственные пометки участников для будущего использования в проектах
+podman image ls 
+# список скаченных образов
+# REPOSITORY                                                TAG         IMAGE ID      CREATED        SIZE
+# artifactory.raiffeisen.ru/ext-rbru-osimage-docker/alpine  3.14        fafcc3444ee9  22 months ago  6.15 MB
 ```
 
-- Сценарий "Как ...?"
+- Сценарий "Как скачать образ?"
 ```shell
-podman image pull {{ registry-host }}/{{ os-images-path }}/alpine:3.14
+podman image pull {{ registry-host }}/{{ os-images-path }}/alpine:3.14 # Скачать образ
 podman image ls
 ```
 
-- Сценарий "Как ...?"
+- Сценарий "Как посмотреть историю образа?"
 ```shell
 podman image history {{ registry-host }}/{{ os-images-path }}/alpine:3.14
-podman image inspect {{ registry-host }}/{{ os-images-path }}/alpine:3.14 [| jq]
+# [root@s-msk-t-itacademy43313 ~]# podman image history artifactory.raiffeisen.ru/ext-rbru-osimage-docker/alpine:3.14
+# ID            CREATED        CREATED BY                                     SIZE        COMMENT
+# fafcc3444ee9  292 years ago  LABEL ru.raiffeisen.osimage.created="2021-...  279 kB
+# <missing>     22 months ago  /bin/sh -c #(nop)  CMD ["/bin/sh"]             0 B
+# <missing>     22 months ago  /bin/sh -c #(nop) ADD file:aad4290d27580cc...  5.87 MB
+
+podman image inspect {{ registry-host }}/{{ os-images-path }}/alpine:3.14 [| jq] # Метаинформация, | jq - раскрашивает json
 ```
 
-- Сценарий "Как ...?"
+- Сценарий "Как добавить что-то в образ и сохранить в реестр?"
 ```shell
-podman container run --name demo -it {{ registry-host }}/{{ os-images-path }}/alpine:3.14
+podman container run --name demo -it {{ registry-host }}/{{ os-images-path }}/alpine:3.14 # it ключт для интерактивного запуска (i) с переключением терминала в сессию пользователя (t)
 /# touch side-effect.txt
 /# exit
 podman container diff demo
 podman container commit demo {{ registry-host }}/container-training-docker/{{ registry-account }}/demo
 podman image ls
+
+# Добавили что-то в образ и сохранили в локально
+# REPOSITORY                                                        TAG         IMAGE ID      CREATED         SIZE
+# artifactory.raiffeisen.ru/container-training-docker/ruasam5/demo  latest      ad107ad89616  23 seconds ago  6.15 MB
+# artifactory.raiffeisen.ru/ext-rbru-osimage-docker/alpine          3.14        fafcc3444ee9  22 months ago   6.15 MB
+
+
 ```
 
-- Сценарий "Как ...?"
+- Сценарий "Как добвать имя:версию (тэг) образу?"
 ```shell
 podman image tag {{ registry-host }}/container-training-docker/{{ registry-account }}/demo:latest {{ registry-host }}/container-training-docker/{{ registry-account }}/demo:1.0.0
 podman image ls
 ```
 
-- Сценарий "Как ...?"
+- Сценарий "Как сохранить образ в реестр?"
 ```shell
 podman image push {{ registry-host }}/container-training-docker/{{ registry-account }}/demo:1.0.0
 ```
 
-- Сценарий "Как ...?"
+- Сценарий "Как удалить контейнер и сохраненные образы?"
 ```shell
 podman image ls
 podman container rm demo
